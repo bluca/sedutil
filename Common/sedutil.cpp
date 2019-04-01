@@ -58,6 +58,9 @@ int main(int argc, char * argv[])
 		return DTAERROR_COMMAND_ERROR;
 	}
 	
+	if (opts.action != sedutiloption::prepareForS3Sleep)
+		exit (1);
+
 	if ((opts.action != sedutiloption::scan) && 
 		(opts.action != sedutiloption::validatePBKDF2) &&
 		(opts.action != sedutiloption::isValidSED)) {

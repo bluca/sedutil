@@ -38,3 +38,20 @@ Linux and Windows executables are available at https://github.com/Drive-Trust-Al
 If you are looking for the PSID revert function see linux/PSIDRevert_LINUX.txt or win32/PSIDRevert_WINDOWS.txt
 
 PLEASE SEE CONTRIBUTING if you would like to make a code contribution.
+
+Locked down to only allow the s3 sleep prepare.
+Store the passphrase in gnome-keyring with:
+
+$ secret-tool store --label opal service hdcrypto disk nvme0n1
+
+Set suid bit on sedutil and create the autostart file:
+
+$ cat <<EOF> ~/.config/autostart/s3-opal.desktop
+[Desktop Entry]
+Name=S3-Opal
+GenericName=Prepare NVME disk for S3 sleep
+Exec=/bin/bash -c 'PASSWORD=$(secret-tool lookup service hdcrypto disk nvme0n1); $HOME/bin/sedutil-cli -n -x  --prepareForS3Sleep 0 $PASSWORD /dev/nvme0n1'
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
+EOF
